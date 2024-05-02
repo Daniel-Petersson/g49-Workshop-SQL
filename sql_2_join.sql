@@ -216,18 +216,26 @@ WHERE
 #
 # 19: What unique languages are spoken in the countries in the same region as the city named Riga
 SELECT DISTINCT
-    cl.Language
+    Language
 FROM
-    countrylanguage cl
-        JOIN
-    country co ON cl.CountryCode = co.Code
+    countrylanguage
 WHERE
-    co.Region = (SELECT 
-            Region
+    CountryCode IN (SELECT 
+            Code
         FROM
-            city
+            country
         WHERE
-            Name = 'Riga');
+            Region = (SELECT 
+                    Region
+                FROM
+                    country
+                WHERE
+                    Code = (SELECT 
+                            CountryCode
+                        FROM
+                            city
+                        WHERE
+                            Name = 'Riga')));
 
 #
 #
